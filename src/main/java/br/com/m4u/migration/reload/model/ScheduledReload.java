@@ -8,11 +8,29 @@ public class ScheduledReload extends Reload {
     private Long anniversary;
     private String periodicity;
 
+    public ScheduledReload() {
+        this.periodicity = "MENSAL";
+    }
+
     public ScheduledReload(Double valor, String channel, String msisdn, Long anniversary, String periodicity) {
         super(valor, channel, msisdn);
         this.anniversary = anniversary;
         this.periodicity = periodicity;
-        this.periodicity = "MONTHLY";
     }
 
+    public Long getAnniversary() {
+        return anniversary;
+    }
+
+    public void setAnniversary(Long anniversary) {
+        this.anniversary = anniversary;
+    }
+
+    public String getPeriodicity() {
+        return periodicity;
+    }
+
+    public void setPeriodicity(String periodicity) {
+        this.periodicity = periodicity;
+    }
 }
