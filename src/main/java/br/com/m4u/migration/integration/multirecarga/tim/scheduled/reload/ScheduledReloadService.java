@@ -16,7 +16,7 @@ public class ScheduledReloadService {
     private RestTemplate restClient;
 //    @Value("${tim.endpoint.fronted.create.scheduled.reload}")
     @Autowired
-    private Environment properties;
+    private Environment env;
 
     public ResponseEntity createScheduledReload(CreateScheduledReloadRequest request) {
         ResponseEntity response = restClient.postForEntity(null, request, ResponseEntity.class);

@@ -1,10 +1,11 @@
 package br.com.m4u.migration.reload.processor;
 
+import br.com.m4u.migration.integration.multirecarga.tim.customer.CustomerService;
+import br.com.m4u.migration.integration.multirecarga.tim.customer.FindCustomerResponse;
 import br.com.m4u.migration.integration.multirecarga.tim.scheduled.reload.ScheduledReloadService;
 import br.com.m4u.migration.reload.model.ScheduledReload;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.client.RestTemplate;
 
 /**
  * Created by sandro on 01/11/16.
@@ -12,13 +13,19 @@ import org.springframework.web.client.RestTemplate;
 public class ScheduledReloadItemProcessor implements ItemProcessor<ScheduledReload, ScheduledReload> {
 
     @Autowired
-    private RestTemplate restClient;
+    private CustomerService customerService;
 
     @Autowired
-    private ScheduledReloadService service;
+    private ScheduledReloadService scheduledReloadService;
 
     @Override
     public ScheduledReload process(ScheduledReload scheduledReload) throws Exception {
-        return null;
+        FindCustomerResponse customerResponse = customerService.findCustomer(scheduledReload.getMsisdn());
+        if (customerResponse.wasSuccessful()) {
+            scheduledReloadService.createScheduledReload(null);
+        } else {
+
+        }
+        return scheduledReload;
     }
 }
