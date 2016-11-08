@@ -5,24 +5,24 @@ package br.com.m4u.migration.reload.model;
  */
 public abstract class Reload {
 
-    private Double amount;
+    private Integer amount;
     private String channel;
     private String msisdn;
 
     public Reload() {
     }
 
-    public Reload(Double amount, String channel, String msisdn) {
+    public Reload(Integer amount, String channel, String msisdn) {
         this.amount = amount;
         this.channel = channel;
         this.msisdn = msisdn;
     }
 
-    public Double getAmount() {
+    public Integer getAmount() {
         return amount;
     }
 
-    public void setAmount(Double amount) {
+    public void setAmount(Integer amount) {
         this.amount = amount;
     }
 

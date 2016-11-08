@@ -9,7 +9,7 @@ public class RefillReload extends Reload {
     private Integer times;
     private String documentNumber;
 
-    public RefillReload(Double valor, String channel, String msisdn, Integer minimumBalance, Integer times, String documentNumber) {
+    public RefillReload(Integer valor, String channel, String msisdn, Integer minimumBalance, Integer times, String documentNumber) {
         super(valor, channel, msisdn);
         this.minimumBalance = minimumBalance;
         this.times = times;

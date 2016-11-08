@@ -18,7 +18,11 @@ public class FindCustomerResponse {
     @JsonProperty("cartaoDeCredito")
     private List<CreditCard> creditCards;
 
+    @JsonProperty("mensagem")
+    private String message;
+
     public FindCustomerResponse() {
+        this.status  = "NOK";
     }
 
     public CreditCard getFavouriteCreditCard() {
@@ -60,4 +64,11 @@ public class FindCustomerResponse {
         this.status = status;
     }
 
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
 }

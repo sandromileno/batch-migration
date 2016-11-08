@@ -20,7 +20,7 @@ public class CreateScheduledReloadRequest {
     private String recipient;
 
     @JsonProperty("aniversario")
-    private Long birthday;
+    private Long anniversary;
 
     @JsonProperty("token")
     private String token;
@@ -60,12 +60,12 @@ public class CreateScheduledReloadRequest {
         this.recipient = recipient;
     }
 
-    public Long getBirthday() {
-        return birthday;
+    public Long getAnniversary() {
+        return anniversary;
     }
 
-    public void setBirthday(Long birthday) {
-        this.birthday = birthday;
+    public void setAnniversary(Long anniversary) {
+        this.anniversary = anniversary;
     }
 
     public String getToken() {

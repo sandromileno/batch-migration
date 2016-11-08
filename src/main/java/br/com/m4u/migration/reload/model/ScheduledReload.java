@@ -12,7 +12,7 @@ public class ScheduledReload extends Reload {
         this.periodicity = "MENSAL";
     }
 
-    public ScheduledReload(Double valor, String channel, String msisdn, Long anniversary, String periodicity) {
+    public ScheduledReload(Integer valor, String channel, String msisdn, Long anniversary, String periodicity) {
         super(valor, channel, msisdn);
         this.anniversary = anniversary;
         this.periodicity = periodicity;
