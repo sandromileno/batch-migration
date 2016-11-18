@@ -25,6 +25,8 @@ import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.task.TaskExecutor;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.web.client.RestTemplate;
 
 
@@ -72,7 +74,7 @@ public class BatchConfiguration {
         DelimitedLineAggregator<ResponseProcessor> delLineAgg = new DelimitedLineAggregator<ResponseProcessor>();
         delLineAgg.setDelimiter(",");
         BeanWrapperFieldExtractor<ResponseProcessor> fieldExtractor = new BeanWrapperFieldExtractor<ResponseProcessor>();
-        fieldExtractor.setNames(new String[] {"status", "responseBody"});
+        fieldExtractor.setNames(new String[] {"status", "responseBody", "externalId", "periodicity", "amount", "recipient", "anniversary"});
         delLineAgg.setFieldExtractor(fieldExtractor);
         writer.setLineAggregator(delLineAgg);
         return writer;
@@ -91,15 +93,25 @@ public class BatchConfiguration {
     @Bean
     public Step step1() {
         return stepBuilderFactory.get("step1")
-                .<ScheduledReload, ResponseProcessor> chunk(10)
+                .<ScheduledReload, ResponseProcessor> chunk(1)
                 .reader(reader())
                 .processor(processor())
                 .writer(writer())
+                .taskExecutor(taskExecutor())
+                .throttleLimit(4)
                 .build();
     }
 
     @Bean
     public RestTemplate restTemplate(RestTemplateBuilder builder) {
         return builder.build();
+    }
+
+    @Bean
+    public TaskExecutor taskExecutor() {
+        ThreadPoolTaskExecutor taskExecutor = new ThreadPoolTaskExecutor();
+        taskExecutor.setMaxPoolSize(4);
+        taskExecutor.afterPropertiesSet();
+        return taskExecutor;
     }
 }

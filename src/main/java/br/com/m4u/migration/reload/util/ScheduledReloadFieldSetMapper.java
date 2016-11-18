@@ -18,7 +18,7 @@ public class ScheduledReloadFieldSetMapper implements FieldSetMapper<ScheduledRe
     public ScheduledReload mapFieldSet(FieldSet fieldSet) throws BindException {
         ScheduledReload scheduledReload = new ScheduledReload();
         scheduledReload.setMsisdn(fieldSet.readString("msisdn"));
-        scheduledReload.setAmount(fieldSet.readInt("amount"));
+        scheduledReload.setAmount(fieldSet.readInt("amount")*100);
         scheduledReload.setChannel(ChannelEnum.getChannel(fieldSet.readString("channel")));
         scheduledReload.setAnniversary(calculateAnniversary(fieldSet.readInt("anniversary")));
         return scheduledReload;
