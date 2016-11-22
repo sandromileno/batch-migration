@@ -1,7 +1,8 @@
 package br.com.m4u.migration.config;
 
 import br.com.m4u.migration.reload.model.ScheduledReload;
-import br.com.m4u.migration.reload.post.processor.ResponseProcessor;
+import br.com.m4u.migration.reload.post.processor.RefillReloadResponseProcessor;
+import br.com.m4u.migration.reload.post.processor.ScheduledReloadResponseProcessor;
 import br.com.m4u.migration.reload.processor.ScheduledReloadItemProcessor;
 import br.com.m4u.migration.reload.util.ScheduledReloadFieldSetMapper;
 import br.com.m4u.migration.reload.util.ScheduledReloadLineMapper;
@@ -48,7 +49,6 @@ public class BatchConfiguration {
 
     @Value("${result_file}")
     private String outputFile;
-
     @Bean
     public ItemReader<ScheduledReload> reader() {
         FlatFileItemReader<ScheduledReload> reader = new FlatFileItemReader<ScheduledReload>();
@@ -63,22 +63,36 @@ public class BatchConfiguration {
     }
 
     @Bean
-    public ItemProcessor<ScheduledReload, ResponseProcessor> processor() {
+    public ItemProcessor<ScheduledReload, ScheduledReloadResponseProcessor> processor() {
         return new ScheduledReloadItemProcessor();
     }
 
     @Bean
-    public ItemWriter<ResponseProcessor> writer() {
-        FlatFileItemWriter<ResponseProcessor> writer = new FlatFileItemWriter<ResponseProcessor>();
+    public ItemWriter<ScheduledReloadResponseProcessor> writer() {
+        FlatFileItemWriter<ScheduledReloadResponseProcessor> writer = new FlatFileItemWriter<ScheduledReloadResponseProcessor>();
         writer.setResource(new FileSystemResource(outputFile));
-        DelimitedLineAggregator<ResponseProcessor> delLineAgg = new DelimitedLineAggregator<ResponseProcessor>();
+        DelimitedLineAggregator<ScheduledReloadResponseProcessor> delLineAgg = new DelimitedLineAggregator<ScheduledReloadResponseProcessor>();
         delLineAgg.setDelimiter(",");
-        BeanWrapperFieldExtractor<ResponseProcessor> fieldExtractor = new BeanWrapperFieldExtractor<ResponseProcessor>();
+        BeanWrapperFieldExtractor<ScheduledReloadResponseProcessor> fieldExtractor = new BeanWrapperFieldExtractor<ScheduledReloadResponseProcessor>();
         fieldExtractor.setNames(new String[] {"status", "responseBody", "externalId", "periodicity", "amount", "recipient", "anniversary"});
         delLineAgg.setFieldExtractor(fieldExtractor);
         writer.setLineAggregator(delLineAgg);
         return writer;
     }
+
+    @Bean
+    public ItemWriter<RefillReloadResponseProcessor> refillWriter() {
+        FlatFileItemWriter<RefillReloadResponseProcessor> writer = new FlatFileItemWriter<RefillReloadResponseProcessor>();
+        writer.setResource(new FileSystemResource(outputFile));
+        DelimitedLineAggregator<RefillReloadResponseProcessor> delLineAgg = new DelimitedLineAggregator<RefillReloadResponseProcessor>();
+        delLineAgg.setDelimiter(",");
+        BeanWrapperFieldExtractor<RefillReloadResponseProcessor> fieldExtractor = new BeanWrapperFieldExtractor<RefillReloadResponseProcessor>();
+        fieldExtractor.setNames(new String[] {"status", "responseBody", "externalId", "periodicity", "amount", "recipient", "anniversary"});
+        delLineAgg.setFieldExtractor(fieldExtractor);
+        writer.setLineAggregator(delLineAgg);
+        return writer;
+    }
+
 
     @Bean
     public Job importUserJob(JobCompletionNotificationListener listener) {
@@ -93,12 +107,12 @@ public class BatchConfiguration {
     @Bean
     public Step step1() {
         return stepBuilderFactory.get("step1")
-                .<ScheduledReload, ResponseProcessor> chunk(1)
+                .<ScheduledReload, ScheduledReloadResponseProcessor> chunk(1)
                 .reader(reader())
                 .processor(processor())
                 .writer(writer())
                 .taskExecutor(taskExecutor())
-                .throttleLimit(4)
+                .throttleLimit(10)
                 .build();
     }
 
@@ -110,8 +124,9 @@ public class BatchConfiguration {
     @Bean
     public TaskExecutor taskExecutor() {
         ThreadPoolTaskExecutor taskExecutor = new ThreadPoolTaskExecutor();
-        taskExecutor.setMaxPoolSize(4);
-        taskExecutor.afterPropertiesSet();
+        taskExecutor.setMaxPoolSize(20);
+        taskExecutor.setCorePoolSize(12);
+        taskExecutor.setQueueCapacity(25);
         return taskExecutor;
     }
 }

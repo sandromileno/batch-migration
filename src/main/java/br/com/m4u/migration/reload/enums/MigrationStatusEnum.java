@@ -5,6 +5,7 @@ package br.com.m4u.migration.reload.enums;
  */
 public enum MigrationStatusEnum {
     MIGRATED("MIGRATED"),
+    CHANGED("CHANGED"),
     NOT_MIGRATED("NOT_MIGRATED");
 
     private String status;

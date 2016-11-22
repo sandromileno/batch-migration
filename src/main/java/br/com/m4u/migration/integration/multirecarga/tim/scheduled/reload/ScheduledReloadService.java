@@ -33,4 +33,28 @@ public class ScheduledReloadService {
         }
         return response;
     }
+
+    public FindScheduledReloadResponse findScheduledReload(String msisdn, String channel) {
+        FindScheduledReloadResponse response;
+        try {
+            response = restClient.getForObject(env.getProperty("tim.endpoint.fronted.find.scheduled.reload"), FindScheduledReloadResponse.class, channel, msisdn);
+        } catch (HttpClientErrorException ex) {
+            response = new FindScheduledReloadResponse(ex.getStatusCode(), ex.getMessage());
+        } catch (Exception e) {
+            response = new FindScheduledReloadResponse(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+        return response;
+    }
+
+    public ChangeScheduledReloadResponse changeScheduledReload(ChangeScheduledReloadRequest request, String channel) {
+        ChangeScheduledReloadResponse response = null;
+        try {
+            response = restClient.postForObject(env.getProperty("tim.endpoint.fronted.change.scheduled.reload"), request, ChangeScheduledReloadResponse.class, channel);
+        } catch(HttpClientErrorException ex) {
+            response = new ChangeScheduledReloadResponse(ex.getStatusCode(), ex.getMessage());
+        } catch (Exception e) {
+            response = new ChangeScheduledReloadResponse(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+        return response;
+    }
 }

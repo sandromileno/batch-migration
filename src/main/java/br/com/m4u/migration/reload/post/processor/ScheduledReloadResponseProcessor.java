@@ -3,7 +3,7 @@ package br.com.m4u.migration.reload.post.processor;
 /**
  * Created by sandro on 07/11/16.
  */
-public class ResponseProcessor {
+public class ScheduledReloadResponseProcessor {
 
     private String status;
     private String externalId;
@@ -13,15 +13,15 @@ public class ResponseProcessor {
     private Long anniversary;
     private String responseBody;
 
-    public ResponseProcessor() {
+    public ScheduledReloadResponseProcessor() {
     }
 
-    public ResponseProcessor(String status, String responseBody) {
+    public ScheduledReloadResponseProcessor(String status, String responseBody) {
         this.status = status;
         this.responseBody = responseBody;
     }
 
-    public ResponseProcessor(String status) {
+    public ScheduledReloadResponseProcessor(String status) {
         this.status = status;
     }
 

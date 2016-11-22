@@ -2,7 +2,10 @@ package br.com.m4u.migration.reload.builder;
 
 import br.com.m4u.migration.integration.multirecarga.tim.customer.CreditCard;
 import br.com.m4u.migration.integration.multirecarga.tim.customer.FindCustomerResponse;
+import br.com.m4u.migration.integration.multirecarga.tim.scheduled.reload.ChangeScheduledReloadRequest;
 import br.com.m4u.migration.integration.multirecarga.tim.scheduled.reload.CreateScheduledReloadRequest;
+import br.com.m4u.migration.integration.multirecarga.tim.scheduled.reload.FindScheduledReloadResponse;
+import br.com.m4u.migration.integration.multirecarga.tim.scheduled.reload.ScheduledReloadResponse;
 import br.com.m4u.migration.reload.model.ScheduledReload;
 
 /**
@@ -23,5 +26,18 @@ public class ScheduledReloadBuilder {
             }
         }
         return request;
+    }
+
+    public static ChangeScheduledReloadRequest build(FindScheduledReloadResponse response, ScheduledReload scheduledReload, String token) {
+        ScheduledReloadResponse scheduledReloadResponse = response.getScheduledReloadResponse();
+        ChangeScheduledReloadRequest changeRequest= new ChangeScheduledReloadRequest();
+        changeRequest.setExternalId(scheduledReloadResponse.getExternalId());
+        changeRequest.setPeriodicity(scheduledReloadResponse.getPeriodicity());
+        changeRequest.setRecipient(scheduledReloadResponse.getRecipient());
+        changeRequest.setMsisdn(scheduledReloadResponse.getRecipient());
+        changeRequest.setAnniversary(scheduledReload.getAnniversary());
+        changeRequest.setToken(token);
+        changeRequest.setValue(String.valueOf(scheduledReload.getAmount().intValue()));
+        return changeRequest;
     }
 }
