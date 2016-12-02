@@ -13,11 +13,11 @@ import br.com.m4u.migration.reload.model.ScheduledReload;
  */
 public class ScheduledReloadBuilder {
 
-    public static CreateScheduledReloadRequest build(FindCustomerResponse response, ScheduledReload scheduledReload) {
+    public static CreateScheduledReloadRequest build(FindCustomerResponse response, ScheduledReload scheduledReload, String recipient) {
         CreateScheduledReloadRequest request = new CreateScheduledReloadRequest();
         request.setAnniversary(scheduledReload.getAnniversary());
         request.setMsisdn(response.getCustomer().getMsisdn());
-        request.setRecipient(response.getCustomer().getMsisdn());
+        request.setRecipient(recipient);
         request.setPeriodicity(scheduledReload.getPeriodicity());
         request.setValue(String.valueOf(scheduledReload.getAmount().intValue()));
         for (CreditCard creditCard : response.getCreditCards()) {
@@ -34,7 +34,7 @@ public class ScheduledReloadBuilder {
         changeRequest.setExternalId(scheduledReloadResponse.getExternalId());
         changeRequest.setPeriodicity(scheduledReloadResponse.getPeriodicity());
         changeRequest.setRecipient(scheduledReloadResponse.getRecipient());
-        changeRequest.setMsisdn(scheduledReloadResponse.getRecipient());
+        changeRequest.setMsisdn(scheduledReload.getMsisdn());
         changeRequest.setAnniversary(scheduledReload.getAnniversary());
         changeRequest.setToken(token);
         changeRequest.setValue(String.valueOf(scheduledReload.getAmount().intValue()));

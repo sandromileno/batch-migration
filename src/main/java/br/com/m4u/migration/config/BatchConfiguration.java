@@ -56,7 +56,7 @@ public class BatchConfiguration {
         reader.setLineMapper(new ScheduledReloadLineMapper() {{
             setFieldSetMapper(new ScheduledReloadFieldSetMapper());
             setLineTokenizer(new DelimitedLineTokenizer() {{
-                setNames(new String[] { "msisdn", "amount", "channel", "anniversary" });
+                setNames(new String[] { "msisdn", "dependent","amount", "channel", "anniversary" });
             }});
         }});
         return reader;

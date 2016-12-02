@@ -42,21 +42,50 @@ public class FindScheduledReloadResponse {
         actualDate.setTimeInMillis(scheduledReload.getAnniversary());
 
         for(ScheduledReloadResponse response : objects) {
-            Calendar newDate = Calendar.getInstance();
-            newDate.setTimeInMillis(response.getAnniversary());
+            if(response.getRecipient().equals(scheduledReload.getMsisdn())) {
+                Calendar newDate = Calendar.getInstance();
+                newDate.setTimeInMillis(response.getAnniversary());
 
-            if (response.getAmount().equals(scheduledReload.getAmount()) &&
-                Integer.valueOf(newDate.get(Calendar.DAY_OF_MONTH)).equals(actualDate.get(Calendar.DAY_OF_MONTH))) {
-                return false;
-            } else {
-                return true;
+                if (response.getAmount().equals(scheduledReload.getAmount()) &&
+                        Integer.valueOf(newDate.get(Calendar.DAY_OF_MONTH)).equals(actualDate.get(Calendar.DAY_OF_MONTH))) {
+                    return false;
+                } else {
+                    return true;
+                }
+
             }
         }
         return false;
     }
 
-    public boolean hasSheduledReload() {
-        return (objects != null && !objects.isEmpty());
+    public boolean dependenteWasChanged(ScheduledReload scheduledReload) {
+        Calendar actualDate = Calendar.getInstance();
+        actualDate.setTimeInMillis(scheduledReload.getAnniversary());
+
+        for(ScheduledReloadResponse response : objects) {
+            if(response.getRecipient().equals(scheduledReload.getDependent())) {
+                Calendar newDate = Calendar.getInstance();
+                newDate.setTimeInMillis(response.getAnniversary());
+
+                if (response.getAmount().equals(scheduledReload.getAmount()) &&
+                        Integer.valueOf(newDate.get(Calendar.DAY_OF_MONTH)).equals(actualDate.get(Calendar.DAY_OF_MONTH))) {
+                    return false;
+                } else {
+                    return true;
+                }
+
+            }
+        }
+        return false;
+    }
+
+    public boolean hasSheduledReload(String receiver) {
+        for(ScheduledReloadResponse resp : objects) {
+            if(resp.getRecipient().equals(receiver)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public Integer getCode() {

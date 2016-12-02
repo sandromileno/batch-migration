@@ -21,6 +21,7 @@ public class ScheduledReloadFieldSetMapper implements FieldSetMapper<ScheduledRe
         scheduledReload.setAmount(fieldSet.readInt("amount")*100);
         scheduledReload.setChannel(ChannelEnum.getChannel(fieldSet.readString("channel")));
         scheduledReload.setAnniversary(calculateAnniversary(fieldSet.readInt("anniversary")));
+        scheduledReload.setDependent(fieldSet.readString("dependent"));
         return scheduledReload;
     }
 

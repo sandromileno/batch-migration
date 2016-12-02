@@ -8,6 +8,7 @@ public abstract class Reload {
     private Integer amount;
     private String channel;
     private String msisdn;
+    private String dependent;
 
     public Reload() {
     }
@@ -40,5 +41,13 @@ public abstract class Reload {
 
     public void setMsisdn(String msisdn) {
         this.msisdn = msisdn;
+    }
+
+    public String getDependent() {
+        return dependent;
+    }
+
+    public void setDependent(String dependent) {
+        this.dependent = dependent;
     }
 }
