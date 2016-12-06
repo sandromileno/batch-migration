@@ -114,7 +114,7 @@ public class ScheduledReloadItemProcessor implements ItemProcessor<ScheduledRelo
         scheduledReloadResponseProcessor.setPeriodicity(scheduledReload.getPeriodicity());
         scheduledReloadResponseProcessor.setAmount(scheduledReload.getAmount());
         scheduledReloadResponseProcessor.setAnniversary(scheduledReload.getAnniversary());
-        scheduledReloadResponseProcessor.setRecipient(scheduledReload.getMsisdn());
+        scheduledReloadResponseProcessor.setRecipient(scheduledReload.getDependent());
         return scheduledReloadResponseProcessor;
     }
 
